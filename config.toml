@@ -232,7 +232,7 @@ enableGitInfo = false
   [[params.social]]
     icon = "orcid"
     icon_pack = "ai"
-    link = " https://orcid.org/0000-0002-8120-0084"
+    link = "https://orcid.org/0000-0002-8120-0084"
 
   [[params.social]]
     icon = "google-scholar"
