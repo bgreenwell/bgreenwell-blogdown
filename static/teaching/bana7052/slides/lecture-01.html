@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # Association and Simple Linear Regression
 ## Lecture 01
 ### Brandon M. Greenwell
-### 05 September, 2018
+### 06 September, 2018
 
 ---
 
@@ -36,7 +36,7 @@ class: inverse
 
 * Chapter: 1
 
-* Sections: 1.1--1.8
+* Sections: 1.1-1.8
 
 * Main topics:
 
@@ -57,9 +57,10 @@ class: inverse
 ```r
 # List of required (CRAN) packages
 pkgs &lt;- c(
-  "dplyr",    # for data wrangling
-  "ggplot2",  # for awesome graphics
-  "tibble"    # for nicer data frames
+  "dplyr",     # for data wrangling
+  "ggplot2",   # for awesome graphics
+  "HistData",  # for historical data sets
+  "tibble"     # for nicer data frames
 )
 
 # Install required (CRAN) packages
@@ -97,10 +98,11 @@ roundhouse::kick("Chuck Norris knows the last digit of pi",
 
 
 ---
+class: center, middle
 
 # Read the 📖!
 
-&lt;img src="images/read-the-book.jpg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/read-the-book.jpg" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -171,16 +173,24 @@ gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 2)
 
 # Pearson correlation
 
-* The (Pearson) correlation coefficient (also called the *Pearson product-moment correlation coefficient*) between two random variables `\(X\)` and `\(Y\)` is given by `\(Cor\left(X, Y\right) = \rho = Cov\left(X, Y\right) / \left(\sigma_X\sigma_Y\right)\)`
+.large[
+
+* The (Pearson) correlation coefficient (also called the *Pearson product-moment correlation coefficient*) between two random variables `\(X\)` and `\(Y\)` is given by 
+
+`$$Cor\left(X, Y\right) = \rho = \frac{Cov\left(X,Y\right)}{\sigma_X\sigma_Y}$$`
 
 * Given a sample `\(\left\{\left(x_i, y_i\right)\right\}_{i=1}^n\)`, we estimate `\(\rho\)` with `\(r = S_{xy} / \sqrt{S_{xx}S_{yy}}\)`
 
   - Where, for example, `\(S_{xy} = \sum_{i=1}^n\left(x_i - \bar{x}\right)\left(y_i - \bar{y}\right)\)`
 
+]
+
 
 ---
 
 # Pearson correlation
+
+.medium[
 
 * It is common to test the hypothesis `\(H_0: \rho = 0\)` vs. `\(H_1: \rho \ne 0\)`
 
@@ -194,10 +204,14 @@ gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 2)
 
     - Simple linear relationships can be described by a *slope* and *intercept*
 
+]
+
 
 ---
 
-# Cautions in interpretting correlation(s)
+# Interpretting correlation(s) ⚠️
+
+.large[
 
 * Correlation between `\(X\)` and `\(Y\)` does not imply causation
 
@@ -207,27 +221,167 @@ gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 2)
     
 * The Pearson correlation only measures the **linear association **between `\(X\)` and `\(Y\)`
 
-
----
-
-# Correlation does NOT imply causation
-
-* [Correlation and uncontrolled experiments](https://imgur.com/gallery/uBSTj2a)
-
-* [Other examples](http://www.tylervigen.com/spurious-correlations)
+]
 
 
 ---
+
+# Crystal weight data
+
+The data frame `investr::crystal` gives the growing time and final weight of 14 crustals:
+
+.scrollable[
+
+
+```r
+# Load the crystal weight data
+data(crystal, package = "investr")
+tibble::as_tibble(crystal)  # print a summary of the data
+```
+
+```
+## # A tibble: 14 x 2
+##     time weight
+##    &lt;dbl&gt;  &lt;dbl&gt;
+##  1     2   0.08
+##  2     4   1.12
+##  3     6   4.43
+##  4     8   4.98
+##  5    10   4.92
+##  6    12   7.18
+##  7    14   5.57
+##  8    16   8.4 
+##  9    18   8.81
+## 10    20  10.8 
+## 11    22  11.2 
+## 12    24  10.1 
+## 13    26  13.1 
+## 14    28  15.0
+```
+
+]
+
+
+---
+
+# Your turn!
+
+* Draw a scatter plot of `time` vs `weight` for the `crystal` data frame
+
+    - Does there appear to be an association between these two variables?
+    
+    - Describe the nature of the association (if it exists)
+
+* Use the `cor()` and `cor.test()` functions to assess the Pearson correlation between these two variables
+
+    - **Hint:** Use `?cor` and `?cor.test` to see how to use these functions and for explanations of their respective output
+    
+    - Interpet the *p*-value in the output
+
+
+---
+
+# Solution
+
+.scrollable[
+
+
+```r
+# Scatterplot using base R graphics
+*# plot(crystal)  # OK
+*plot(weight ~ time, data = crystal)  # better
+```
+
+&lt;img src="lecture-01_files/figure-html/your-turn-01-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+```r
+# Scatterplot using ggplot2
+ggplot(crystal, aes(x = time, y = weight)) +
+  geom_point()
+```
+
+&lt;img src="lecture-01_files/figure-html/your-turn-01-2.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+```r
+# Correlation matrix
+cor(crystal)
+```
+
+```
+##             time    weight
+## time   1.0000000 0.9719016
+## weight 0.9719016 1.0000000
+```
+
+```r
+*with(crystal, cor(time, weight))
+```
+
+```
+## [1] 0.9719016
+```
+
+```r
+*cor(crystal$time, crystal$weight)
+```
+
+```
+## [1] 0.9719016
+```
+
+```r
+# Test for (linear) association
+with(crystal, cor.test(time, weight, conf.level = 0.95))
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  time and weight
+## t = 14.303, df = 12, p-value = 6.688e-09
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.9112032 0.9912976
+## sample estimates:
+##       cor 
+## 0.9719016
+```
+
+]
+
+
+---
+
+# Correlation and uncontrolled experiments
+
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/ntnalq-2nNU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen&gt;&lt;/iframe&gt;
+
+
+---
+class: center, middle
+
+.huge[
+
+[Fun with spurious correlations](http://www.tylervigen.com/spurious-correlations)
+
+]
+
+
+---
+class: center, middle
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="images/correlation-causation-comic.png" alt="If you get the joke in this comic, then you probably undestand enough about correlation!" width="70%" /&gt;
+&lt;img src="images/correlation-causation-comic.png" alt="If you get the joke in this comic, then you probably undestand enough about correlation!" width="100%" /&gt;
 &lt;p class="caption"&gt;If you get the joke in this comic, then you probably undestand enough about correlation!&lt;/p&gt;
 &lt;/div&gt;
 
 
 ---
 
-# Which of the following statement(s) is/are true?
+# Which of the following statements are true?
+
+.medium[
 
 a. The Pearson correlation coefficient is a measure of linear association
 
@@ -237,18 +391,24 @@ c. A negative Pearson correlation indicates a low degree of linear association
 
 d. A random cloud of data implies a negative correlation.
 
+]
+
 
 ---
 
-# Which of the following statement(s) is/are true?
+# Which of the following statements are true?
 
-a. **The Pearson correlation coefficient is a measure of linear association**
+.medium[
 
-b. A non-significant *p*-value for a Pearson correlation means no relationship
+a. .green[The Pearson correlation coefficient is a measure of linear association]
 
-c. A negative Pearson correlation indicates a low degree of linear association
+b. .red[A non-significant *p*-value for a Pearson correlation means no relationship]
 
-d. A random cloud of data implies a negative correlation.
+c. .red[A negative Pearson correlation indicates a low degree of linear association]
+
+d. .red[A random cloud of data implies a negative correlation]
+
+]
 
 
 ---
@@ -266,6 +426,8 @@ class: inverse, center, middle
 
 # Historical origins of regression
 
+.large[
+
 * First developed by Sir Francis Galton in the later part of the 19th century
 
 * Studied heights of parents and their children
@@ -274,15 +436,18 @@ class: inverse, center, middle
 
 * The term "regression" persists to this day!
 
+]
+
 
 ---
 
 # Historical origins of regression
 
+.scrollable[
+
 
 ```r
-install.packages(c("ggplot2", "HistData"))
-library(ggplot2)
+# Scatterplot of Galton's data on the heights of parents and their children
 ggplot(HistData::Galton, aes(x = parent, y = child)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
@@ -290,19 +455,30 @@ ggplot(HistData::Galton, aes(x = parent, y = child)) +
   labs(x = "Height of mid-parent (in)", y = "Height of child (in)")
 ```
 
+&lt;img src="lecture-01_files/figure-html/galton-01-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
----
-
-# Historical origins of regression
-
-&lt;img src="lecture-01_files/figure-html/galton-02-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
 
 
 ---
 
 # Functional relationships
 
+.scrollable[
+
+
+```r
+# Scatterplot of (fake) functional data
+ggplot(data.frame(x = 1:10, y = 15*1:10), aes(x, y)) +
+  geom_line() +
+  geom_point(size = 2, color = "red2") +
+  labs(x = "Hours worked (X)", y = "Rate of pay (Y)", 
+       title = expression(paste("Relation: ", Y == 15 %*% X)))
+```
+
 &lt;img src="lecture-01_files/figure-html/functional-relation-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
 
 
 ---
@@ -314,25 +490,31 @@ ggplot(HistData::Galton, aes(x = parent, y = child)) +
 
 ---
 
-# Examples of statistical relationships
+## Examples of statistical relationships
+
+.scrollable[
+
+.medium[
 
 * Simple linear regression (SLR)
 
-    - `\(Y = \beta_0 + \beta_1 X + \epsilon\)`
+    `$$Y = \beta_0 + \beta_1 X + \epsilon$$`
     
 * Multiple linear regression (MLR)
 
-    - `\(Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \epsilon\)`
-    
-    - `\(Y = \beta_0 + \sum_{i=1}^p \beta_p X_p + \epsilon\)`
+    `$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \epsilon \\ = \beta_0 + \sum_{i=1}^p \beta_p X_p + \epsilon$$`
     
  * Polynomial regression (of degree `\(p\)`)
 
-    - `\(Y = \beta_0 + \sum_{i=1}^p \beta_p X^p + \epsilon\)`   
+    `$$Y = \beta_0 + \sum_{i=1}^p \beta_p X^p + \epsilon$$` 
 
  * Nonlinear regression
 
-    - `\(Y = \frac{\beta_1 X}{\beta_2 + X} + \epsilon\)`   
+    `$$Y = \frac{\beta_1 X}{\beta_2 + X} + \epsilon$$`   
+
+]
+
+]
 
 
 ---
@@ -354,7 +536,15 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
 
 # Simple linear regression (SLR)
 
+.medium[
+
 * Data: `\(\left\{\left(X_i, Y_i\right)\right\}_{i=1}^n\)`
+
+]
+
+--
+
+.medium[ 
 
 * Model: `\(Y_i = \beta_0 + \beta_1 X_i + \epsilon_i\)`
 
@@ -368,25 +558,39 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
     
     - `\(\epsilon_i \sim iid \left(0, \sigma^2\right)\)`
 
+]
+
 
 ---
 
 # Assumptions about the errors
 
+.large[
+
 * For `\(i/j = 1, 2, \dots, n\)`
 
-    1. `\(\quad E\left(\epsilon_i\right) = 0\)`
+    1) `\(\quad E\left(\epsilon_i\right) = 0\)`
 
-    2. `\(\quad Var\left(\epsilon_i\right) = \sigma^2\)` (homoscedacticity 😱)
+    2) `\(\quad Var\left(\epsilon_i\right) = \sigma^2\)` (homoscedacticity 😱)
 
-    3. `\(\quad Cov\left(\epsilon_i, \epsilon_j\right) = 0\)` (independence)
-    
-* Assumptions 1.--3. can be summarized as `\(\epsilon_i \sim iid \left(0, \sigma^2\right)\)`
-    
+    3) `\(\quad Cov\left(\epsilon_i, \epsilon_j\right) = 0\)` (independence)
+
+]
+
+--
+
+.large[
+
+* Assumptions 1)-3) can be summarized as `\(\epsilon_i \stackrel{iid}{\sim} \left(0, \sigma^2\right)\)`
+
+]
+
 
 ---
 
 # Properites of SLR
+
+.large[
 
 * Simple linear regression: `\(Y_i = \beta_0 + \beta_1 X_i + \epsilon_i\)`
 
@@ -398,31 +602,39 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
     
 * `\(Cor\left(Y_i, Y_j\right) = 0\)` `\(\forall i \ne j\)` (**Why?** 🤔)
 
+]
+
 
 ---
 
-# The SLR model with normal errors
+# SLR with normal errors
 
-$$
-Y_i = \beta_0 + \beta_1 X_i + \epsilon_i, \quad i = 1, 2, \dots, n
-$$
+.large[
 
-&lt;br/&gt;
+* `\(Y_i = \beta_0 + \beta_1 X_i + \epsilon_i, \quad i = 1, 2, \dots, n\)`
 
-where `\(\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)\)`, is equivalent to
+where `\(\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)\)`
 
-&lt;br/&gt;
+]
 
-$$
-Y_i \stackrel{iid}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n
-$$
+--
 
-* `\(\mu_i = \beta_0 + \beta_1 X_i\)` is called the *linear predictor* (LP)
+.red[**OR, EQUIVALENTLY**]
+
+.large[
+
+* `\(Y_i \stackrel{iid}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n\)`
+
+     - `\(\mu_i = \beta_0 + \beta_1 X_i\)` is called the *linear predictor* (LP)
+
+]
 
 
 ---
 
 # Interpretting the regression coefficients
+
+.medium[
 
 * `\(\beta_0\)` is the *y*-intercept (or *bias term*)
 
@@ -436,10 +648,13 @@ $$
     
     - It represents the change in the mean response per one-unit increase in `\(X\)`
 
+]
+
 
 ---
+class: center, middle 
 
-&lt;img src="images/slr-conditional-distribution.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/slr-conditional-distribution.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -485,7 +700,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

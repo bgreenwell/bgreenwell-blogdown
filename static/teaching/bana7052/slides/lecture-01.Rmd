@@ -5,6 +5,7 @@ author: "Brandon M. Greenwell"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     css: ["default", "custom.css", "hygge"]
     lib_dir: libs
     nature:
@@ -48,7 +49,7 @@ class: inverse
 
 * Chapter: 1
 
-* Sections: 1.1--1.8
+* Sections: 1.1-1.8
 
 * Main topics:
 
@@ -68,9 +69,10 @@ class: inverse
 ```{r prerequisites, eval=FALSE}
 # List of required (CRAN) packages
 pkgs <- c(
-  "dplyr",    # for data wrangling
-  "ggplot2",  # for awesome graphics
-  "tibble"    # for nicer data frames
+  "dplyr",     # for data wrangling
+  "ggplot2",   # for awesome graphics
+  "HistData",  # for historical data sets
+  "tibble"     # for nicer data frames
 )
 
 # Install required (CRAN) packages
@@ -105,10 +107,11 @@ roundhouse::kick("Chuck Norris knows the last digit of pi",
 
 
 ---
+class: center, middle
 
 # Read the `r emo::ji("book")`!
 
-```{r wonka, echo=FALSE, out.width="50%"}
+```{r wonka, echo=FALSE, out.width="60%"}
 knitr::include_graphics("images/read-the-book.jpg")
 ```
 
@@ -200,7 +203,7 @@ gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 2)
 
 # Pearson correlation
 
-```{r pearson-correlation-01, echo=FALSE, out.width="100%"}
+```{r pearson-correlation-01, echo=FALSE, fig.width=7, fig.height=5, out.width="100%"}
 set.seed(101)
 d <- tibble(
   x = seq(from = -2, to = 2, length = 100),
@@ -223,8 +226,9 @@ p4 <- "images/correlation-coefficient.png" %>%
   grid::rasterGrob(interpolate = TRUE, width = 0.8)
 p4 <- ggplot() +
   annotation_custom(p4, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf)
-# p1 + p2 + p3 - p4 + plot_layout(ncol = 1, widths = c(1, 1, 1), heights = c(1, 1))
-(p1 | p2 | p3) / p4
+p1 + p2 + p3 - p4 + 
+  plot_layout(ncol = 1, widths = c(1, 1, 1), heights = c(1, 1.5))
+# (p1 | p2 | p3) / p4
 ```
 
 
@@ -243,16 +247,24 @@ ggplot(d, aes(x = x, y = y3)) +
 
 # Pearson correlation
 
-* The (Pearson) correlation coefficient (also called the *Pearson product-moment correlation coefficient*) between two random variables $X$ and $Y$ is given by $Cor\left(X, Y\right) = \rho = Cov\left(X, Y\right) / \left(\sigma_X\sigma_Y\right)$
+.large[
+
+* The (Pearson) correlation coefficient (also called the *Pearson product-moment correlation coefficient*) between two random variables $X$ and $Y$ is given by 
+
+$$Cor\left(X, Y\right) = \rho = \frac{Cov\left(X,Y\right)}{\sigma_X\sigma_Y}$$
 
 * Given a sample $\left\{\left(x_i, y_i\right)\right\}_{i=1}^n$, we estimate $\rho$ with $r = S_{xy} / \sqrt{S_{xx}S_{yy}}$
 
   - Where, for example, $S_{xy} = \sum_{i=1}^n\left(x_i - \bar{x}\right)\left(y_i - \bar{y}\right)$
 
+]
+
 
 ---
 
 # Pearson correlation
+
+.medium[
 
 * It is common to test the hypothesis $H_0: \rho = 0$ vs. $H_1: \rho \ne 0$
 
@@ -266,10 +278,14 @@ ggplot(d, aes(x = x, y = y3)) +
 
     - Simple linear relationships can be described by a *slope* and *intercept*
 
+]
+
 
 ---
 
-# Cautions in interpretting correlation(s)
+# Interpretting correlation(s) `r emo::ji("warning")`
+
+.large[
 
 * Correlation between $X$ and $Y$ does not imply causation
 
@@ -279,26 +295,100 @@ ggplot(d, aes(x = x, y = y3)) +
     
 * The Pearson correlation only measures the **linear association **between $X$ and $Y$
 
-
----
-
-# Correlation does NOT imply causation
-
-* [Correlation and uncontrolled experiments](https://imgur.com/gallery/uBSTj2a)
-
-* [Other examples](http://www.tylervigen.com/spurious-correlations)
+]
 
 
 ---
 
-```{r correlation-causation, echo=FALSE, fig.cap="If you get the joke in this comic, then you probably undestand enough about correlation!"}
+# Crystal weight data
+
+The data frame `investr::crystal` gives the growing time and final weight of `r nrow(investr::crystal)` crustals:
+
+.scrollable[
+
+```{r crystal}
+# Load the crystal weight data
+data(crystal, package = "investr")
+tibble::as_tibble(crystal)  # print a summary of the data
+```
+
+]
+
+
+---
+
+# Your turn!
+
+* Draw a scatter plot of `time` vs `weight` for the `crystal` data frame
+
+    - Does there appear to be an association between these two variables?
+    
+    - Describe the nature of the association (if it exists)
+
+* Use the `cor()` and `cor.test()` functions to assess the Pearson correlation between these two variables
+
+    - **Hint:** Use `?cor` and `?cor.test` to see how to use these functions and for explanations of their respective output
+    
+    - Interpet the *p*-value in the output
+
+
+---
+
+# Solution
+
+.scrollable[
+
+```{r your-turn-01}
+# Scatterplot using base R graphics
+# plot(crystal)  # OK  #<<
+plot(weight ~ time, data = crystal)  # better  #<<
+
+# Scatterplot using ggplot2
+ggplot(crystal, aes(x = time, y = weight)) +
+  geom_point()
+
+# Correlation matrix
+cor(crystal)
+with(crystal, cor(time, weight))   #<< 
+cor(crystal$time, crystal$weight)  #<< 
+
+# Test for (linear) association
+with(crystal, cor.test(time, weight, conf.level = 0.95))
+```
+
+]
+
+
+---
+
+# Correlation and uncontrolled experiments
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ntnalq-2nNU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+---
+class: center, middle
+
+.huge[
+
+[Fun with spurious correlations](http://www.tylervigen.com/spurious-correlations)
+
+]
+
+
+---
+class: center, middle
+
+```{r correlation-causation, echo=FALSE, out.width="100%", fig.cap="If you get the joke in this comic, then you probably undestand enough about correlation!"}
 knitr::include_graphics("images/correlation-causation-comic.png")
 ```
 
 
 ---
 
-# Which of the following statement(s) is/are true?
+# Which of the following statements are true?
+
+.medium[
 
 a. The Pearson correlation coefficient is a measure of linear association
 
@@ -308,18 +398,24 @@ c. A negative Pearson correlation indicates a low degree of linear association
 
 d. A random cloud of data implies a negative correlation.
 
+]
+
 
 ---
 
-# Which of the following statement(s) is/are true?
+# Which of the following statements are true?
 
-a. **The Pearson correlation coefficient is a measure of linear association**
+.medium[
 
-b. A non-significant *p*-value for a Pearson correlation means no relationship
+a. .green[The Pearson correlation coefficient is a measure of linear association]
 
-c. A negative Pearson correlation indicates a low degree of linear association
+b. .red[A non-significant *p*-value for a Pearson correlation means no relationship]
 
-d. A random cloud of data implies a negative correlation.
+c. .red[A negative Pearson correlation indicates a low degree of linear association]
+
+d. .red[A random cloud of data implies a negative correlation]
+
+]
 
 
 ---
@@ -336,6 +432,8 @@ knitr::include_graphics("images/george-box.jpg")
 
 # Historical origins of regression
 
+.large[
+
 * First developed by Sir Francis Galton in the later part of the 19th century
 
 * Studied heights of parents and their children
@@ -344,14 +442,17 @@ knitr::include_graphics("images/george-box.jpg")
 
 * The term "regression" persists to this day!
 
+]
+
 
 ---
 
 # Historical origins of regression
 
-```{r galton-01, eval=FALSE}
-install.packages(c("ggplot2", "HistData"))
-library(ggplot2)
+.scrollable[
+
+```{r galton-01}
+# Scatterplot of Galton's data on the heights of parents and their children
 ggplot(HistData::Galton, aes(x = parent, y = child)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
@@ -359,31 +460,25 @@ ggplot(HistData::Galton, aes(x = parent, y = child)) +
   labs(x = "Height of mid-parent (in)", y = "Height of child (in)")
 ```
 
-
----
-
-# Historical origins of regression
-
-```{r galton-02, echo=FALSE}
-ggplot(HistData::Galton, aes(x = parent, y = child)) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
-  labs(x = "Height of mid-parent (in)", y = "Height of child (in)")
-```
+]
 
 
 ---
 
 # Functional relationships
 
-```{r functional-relation, echo=FALSE}
+.scrollable[
+
+```{r functional-relation}
+# Scatterplot of (fake) functional data
 ggplot(data.frame(x = 1:10, y = 15*1:10), aes(x, y)) +
   geom_line() +
   geom_point(size = 2, color = "red2") +
   labs(x = "Hours worked (X)", y = "Rate of pay (Y)", 
        title = expression(paste("Relation: ", Y == 15 %*% X)))
 ```
+
+]
 
 
 ---
@@ -407,25 +502,31 @@ gridExtra::grid.arrange(p1, p2, nrow = 1)
 
 ---
 
-# Examples of statistical relationships
+## Examples of statistical relationships
+
+.scrollable[
+
+.medium[
 
 * Simple linear regression (SLR)
 
-    - $Y = \beta_0 + \beta_1 X + \epsilon$
+    $$Y = \beta_0 + \beta_1 X + \epsilon$$
     
 * Multiple linear regression (MLR)
 
-    - $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \epsilon$
-    
-    - $Y = \beta_0 + \sum_{i=1}^p \beta_p X_p + \epsilon$
+    $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \epsilon \\ = \beta_0 + \sum_{i=1}^p \beta_p X_p + \epsilon$$
     
  * Polynomial regression (of degree $p$)
 
-    - $Y = \beta_0 + \sum_{i=1}^p \beta_p X^p + \epsilon$   
+    $$Y = \beta_0 + \sum_{i=1}^p \beta_p X^p + \epsilon$$ 
 
  * Nonlinear regression
 
-    - $Y = \frac{\beta_1 X}{\beta_2 + X} + \epsilon$   
+    $$Y = \frac{\beta_1 X}{\beta_2 + X} + \epsilon$$   
+
+]
+
+]
 
 
 ---
@@ -444,7 +545,15 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
 
 # Simple linear regression (SLR)
 
+.medium[
+
 * Data: $\left\{\left(X_i, Y_i\right)\right\}_{i=1}^n$
+
+]
+
+--
+
+.medium[ 
 
 * Model: $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$
 
@@ -458,25 +567,39 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
     
     - $\epsilon_i \sim iid \left(0, \sigma^2\right)$
 
+]
+
 
 ---
 
 # Assumptions about the errors
 
+.large[
+
 * For $i/j = 1, 2, \dots, n$
 
-    1. $\quad E\left(\epsilon_i\right) = 0$
+    1) $\quad E\left(\epsilon_i\right) = 0$
 
-    2. $\quad Var\left(\epsilon_i\right) = \sigma^2$ (homoscedacticity `r emo::ji("scream")`)
+    2) $\quad Var\left(\epsilon_i\right) = \sigma^2$ (homoscedacticity `r emo::ji("scream")`)
 
-    3. $\quad Cov\left(\epsilon_i, \epsilon_j\right) = 0$ (independence)
-    
-* Assumptions 1.--3. can be summarized as $\epsilon_i \sim iid \left(0, \sigma^2\right)$
-    
+    3) $\quad Cov\left(\epsilon_i, \epsilon_j\right) = 0$ (independence)
+
+]
+
+--
+
+.large[
+
+* Assumptions 1)-3) can be summarized as $\epsilon_i \stackrel{iid}{\sim} \left(0, \sigma^2\right)$
+
+]
+
 
 ---
 
 # Properites of SLR
+
+.large[
 
 * Simple linear regression: $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$
 
@@ -488,31 +611,39 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
     
 * $Cor\left(Y_i, Y_j\right) = 0$ $\forall i \ne j$ (**Why?** `r emo::ji("thinking")`)
 
+]
+
 
 ---
 
-# The SLR model with normal errors
+# SLR with normal errors
 
-$$
-Y_i = \beta_0 + \beta_1 X_i + \epsilon_i, \quad i = 1, 2, \dots, n
-$$
+.large[
 
-<br/>
+* $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i, \quad i = 1, 2, \dots, n$
 
-where $\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)$, is equivalent to
+where $\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)$
 
-<br/>
+]
 
-$$
-Y_i \stackrel{iid}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n
-$$
+--
 
-* $\mu_i = \beta_0 + \beta_1 X_i$ is called the *linear predictor* (LP)
+.red[**OR, EQUIVALENTLY**]
+
+.large[
+
+* $Y_i \stackrel{iid}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n$
+
+     - $\mu_i = \beta_0 + \beta_1 X_i$ is called the *linear predictor* (LP)
+
+]
 
 
 ---
 
 # Interpretting the regression coefficients
+
+.medium[
 
 * $\beta_0$ is the *y*-intercept (or *bias term*)
 
@@ -526,10 +657,13 @@ $$
     
     - It represents the change in the mean response per one-unit increase in $X$
 
+]
+
 
 ---
+class: center, middle 
 
-```{r slr-conditional-distribution, echo=FALSE}
+```{r slr-conditional-distribution, echo=FALSE, fig.width=7, fig.height=7, out.width="90%"}
 knitr::include_graphics("images/slr-conditional-distribution.png")
 ```
 
@@ -537,6 +671,7 @@ knitr::include_graphics("images/slr-conditional-distribution.png")
 ---
 
 ```{r arsenic-conditional-distribution, echo=FALSE}
+# Scatterplot of arsenic data
 ggplot(investr::arsenic, aes(x = actual, y = measured)) + 
   geom_point(alpha = 0.75) +
   geom_smooth(method = "lm", se = FALSE, size = 0.5) + 
