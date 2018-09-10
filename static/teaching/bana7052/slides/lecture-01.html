@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # Association and Simple Linear Regression
 ## Lecture 01
 ### Brandon M. Greenwell
-### 09 September, 2018
+### 10 September, 2018
 
 ---
 
@@ -624,7 +624,7 @@ where `\(\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)\)`
 
 .large[
 
-* `\(Y_i \stackrel{iid}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n\)`
+* `\(Y_i \stackrel{indep.}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n\)`
 
      - `\(\mu_i = \beta_0 + \beta_1 X_i\)` is called the *linear predictor* (LP)
 
@@ -921,7 +921,7 @@ ggplot(data = crystal, aes(x = time, y = weight)) +
 
 # Your turn
 
-1. Simulate `\(Y_i \stackrel{iid}{\sim} N\left(\mu = 1 + 2X_i, \sigma^2 = 1.2^2\right), \quad i = 1, 2, ... 30\)`, where `\(X_i \stackrel{iid}{\sim} U\left(0, 5\right)\)`.
+1. Simulate `\(Y_i \stackrel{indep.}{\sim} N\left(\mu = 1 + 2X_i, \sigma^2 = 1.2^2\right), \quad i = 1, 2, ... 30\)`, where `\(X_i \stackrel{iid}{\sim} U\left(0, 5\right)\)`
 
 2. Fit an SLR model to the data and estimate the slope and intercept
 

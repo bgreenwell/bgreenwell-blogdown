@@ -9,7 +9,7 @@
 baseurl = "/"
 
 # Title of your site
-title = "Academic"
+title = "Brandon Greenwell"
 
 # Your copyright notice - appears in site footer.
 # To display a copyright symbol, type `&copy;`.
@@ -62,7 +62,9 @@ enableGitInfo = false
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
-  organizations = [ { name = "84.51°", url = "http://www.8451.com/" } ]
+  organizations = [ { name = "84.51°", url = "http://www.8451.com/" },
+                    { name = "Wright State University", url = "https://people.wright.edu/brandon.greenwell" },
+                    { name = "University of Cincinnati", url = "https://business.uc.edu/faculty-and-research/departments/obais/faculty/brandon-greenwell.html" }]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "portrait.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
