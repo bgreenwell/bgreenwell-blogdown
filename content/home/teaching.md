@@ -17,8 +17,13 @@ weight = 60
 
 Courses I have taught or am currently teaching:
 
-- BANA 7052: Applied Linear Regression
+* University of Cincinnati
 
-- STT 7140: Environmental Statistics
+    - [BANA 7052: Applied Linear Regression](https://github.com/bgreenwell/uc-bana7052)
+    
 
-- STT 6300: Biostatistics
+* Wright State University
+
+    - STT 7140: Environmental Statistics
+
+    - STT 6300: Biostatistics
