@@ -303,7 +303,7 @@ $$Cor\left(X, Y\right) = \rho = \frac{Cov\left(X,Y\right)}{\sigma_X\sigma_Y}$$
 
 # Crystal weight data
 
-The data frame `investr::crystal` gives the growing time and final weight of `r nrow(investr::crystal)` crustals:
+The data frame `investr::crystal` gives the growing time and final weight of `r nrow(investr::crystal)` crystals:
 
 .scrollable[
 
@@ -330,7 +330,7 @@ tibble::as_tibble(crystal)  # print a summary of the data
 
     - **Hint:** Use `?cor` and `?cor.test` to see how to use these functions and for explanations of their respective output
     
-    - Interpet the *p*-value in the output
+    - Interpret the *p*-value in the output
 
 
 ---
@@ -688,7 +688,7 @@ ggplot(investr::arsenic, aes(x = actual, y = measured)) +
 
 --
 
-* Ideally, we cwant estimates of $\beta_0$ and $\beta_1$ that give us the "best fitting" line
+* Ideally, we want estimates of $\beta_0$ and $\beta_1$ that give us the "best fitting" line
 
     - But what is meant by "best fitting"?
 
@@ -806,7 +806,7 @@ class: inverse, center, middle
 
 # Your turn
 
-.larger[Fit an SLR model to the crystal weight data using `weight` as the response and `time` as the predictor and intepret the estimated coeficients.]
+.larger[Fit an SLR model to the crystal weight data using `weight` as the response and `time` as the predictor and interpret the estimated coefficients.]
 
 
 ---
@@ -829,7 +829,7 @@ summary(fit)
 
 * The average final weight of crystals increases by an estimated `r round(coef(fit)[2L], digits = 3)` grams for every one-hour increase in growth time `r emo::ji("clock")`
 
-* Does interpretting the intercept make sense in this problem?
+* Does interpreting the intercept make sense in this problem?
 
 ]
 
@@ -892,9 +892,13 @@ ggplot(data = crystal, aes(x = time, y = weight)) +
 
 # Your turn
 
-1. Simulate $Y_i \stackrel{indep.}{\sim} N\left(\mu = 1 + 2X_i, \sigma^2 = 1.2^2\right), \quad i = 1, 2, ... 30$, where $X_i \stackrel{iid}{\sim} U\left(0, 5\right)$
+.large[
 
-2. Fit an SLR model to the data and estimate the slope and intercept
+1. Simulate $Y_i \stackrel{indep.}{\sim} N\left(\mu = 1 + 2X_i, \sigma^2 = 1.2^2\right)$ for $i = 1, 2, \dots, 30$, where $X_i \stackrel{iid}{\sim} U\left(0, 5\right)$
+
+2. Fit an SLR model to the data and estimate the slope and intercept. Do the estimated slope and intercept match closely with the true values? What happens to the estimates if we generate the response from a $N\left(\mu = 1 + 2X_i, \sigma^2 = 0.2^2\right)$ distribution instead?
+
+]
 
 
 ---
@@ -919,3 +923,97 @@ lm(y ~ x)
 ]
 
 
+---
+
+# Properties of the fitted SLR model
+
+.medium[
+
+* $\sum_{i=1}^n e_i = 0$
+
+* $\sum_{i=1}^n e_i^2$ minimizes is a minimum
+
+* $\sum_{i=1}^n X_ie_i = 0$
+
+* $\sum_{i=1}^n \widehat{Y}_ie_i = 0$
+
+* The LS regression line passes through the point $\left(\bar{X}, \bar{Y}\right)$ (i.e., the center of the training data)
+
+]
+
+--
+
+.large[How can we prove the above properties?]
+
+
+---
+
+# Estimating the error variance $\sigma^2$
+
+* What are the unknown parameters of the SLR model $Y_i = \beta_0 + \beta_1X_i + \epsilon_i$?
+
+--
+
+* Assuming $\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)$, we have an additional (unknown) parameter: $\sigma^2$
+
+* How do we estimate $\sigma^2$ (LS estimation only provides estimates for the slope and intercept)
+
+
+---
+
+# Maximum likelihood estimation
+
+.medium[
+
+Since $Y_i \stackrel{indep.}{\sim} N\left(\beta_0 + \beta_1X_i, \sigma^2\right)$, the *likelihood function* for the data (as a function of $\beta_0$, $\beta_1$, and $\sigma^2$) is given by 
+
+$$L\left(\beta_0, \beta_1, \sigma^2\right) = \prod_{i=1}^nf\left(Y_i; \beta_0 + \beta_1X_i, \sigma^2\right),$$ where $$f\left(Y_i; \beta_0 + \beta_1X_i, \sigma^2\right) = \frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{Y_i - \beta_0 - \beta_1 X_i}{2\sigma^2}\right)$$ is the *probability density function* (PDF) of a normal distribution with mean $\beta_0 + \beta_1X_i$ and variance $\sigma^2$.
+
+]
+
+
+---
+
+# Maximum likelihood estimation
+
+* Maximizing the likelihood is the same as maximizing the *log-likelihood* $l = \log\left(L\right)$ (**Why?** `r emo::ji("thinking")`)
+
+* The full log-likelihood is given by 
+
+$$l = -\frac{n}{2}\log\left(2\pi\right) - \frac{n}{2}\log\left(\sigma^2\right) - \frac{1}{2\sigma^2}\sum_{i=1}^n\left(Y_i - \beta_0 - \beta_1X_i\right)^2$$
+
+* Maximum likelihood (ML) estimates of $\beta_0$, $\beta_1$, and $\sigma^2$ can be found by equating the (partial) derivatives of $l$ to zero:
+
+    - $\frac{\partial l}{\partial \beta_0} = \frac{1}{\sigma^2}\sum_{i=1}^n\left(Y_i - \beta_0 - \beta_1X_i\right)$
+    
+    - $\frac{\partial l}{\partial \beta_1} = \frac{1}{\sigma^2}\sum_{i=1}^nX_i\left(Y_i - \beta_0 - \beta_1X_i\right)$
+    
+    - $\frac{\partial l}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{\sigma^4}\sum_{i=1}^n\left(Y_i - \beta_0 - \beta_1X_i\right)^2$
+
+
+---
+
+# Maximum likelihood estimation
+
+.medium[
+
+* As it turns out, the ML estimates of $\beta_0$ and $\beta_1$ (under our current assumptions) are the same as the corresponding LS estimates
+
+* ML estimation, however, provides us with an estimate of the error variance $\sigma^2$ 
+$$\widehat{\sigma}_{MLE}^2 = \frac{1}{n}\sum{i=1}^n e_i^2$$
+
+* However, since $\widehat{\sigma}_{MLE}^2$ is a biased estimate for the error variance, we use an adjusted estimate
+
+$$\widehat{\sigma}^2 = \frac{1}{n-2}\sum{i=1}^n e_i^2 = MSE$$
+
+]
+
+
+---
+class: center, middle
+
+.huge[
+
+[Rocket propellant example](https://github.com/bgreenwell/uc-bana7052/blob/master/code/rocket.R)
+
+]
