@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Inferences in Simple Linear Regression</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Brandon M. Greenwell" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Inferences in Simple Linear Regression
+## Lecture 02
+### Brandon M. Greenwell
+### 09 September, 2018
+
+---
+
+
+
+
+background-image: url(https://creativemaths.net/wp-content/uploads/2012/03/it_is_so_easy1-704x480.png)
+
+???
+
+
+---
+class: inverse
+
+# Reading assignment
+
+.larger[
+
+* Chapter: 1
+
+* Sections: 1.1-1.8
+
+* Main topics:
+
+    - Association 😴
+    
+    - Simple linear regression
+  
+]
+
+
+---
+
+# Prerquisites&lt;sup&gt;1&lt;/sup&gt;
+
+.scrollable[
+
+
+```r
+# List of required (CRAN) packages
+pkgs &lt;- c(
+  "dplyr",     # for data wrangling
+  "ggplot2",   # for awesome graphics
+  "HistData",  # for historical data sets
+  "tibble"     # for nicer data frames
+)
+
+# Install required (CRAN) packages
+for (pkg in pkgs) {
+  if (!requireNamespace(pkg)) {  # check if already installed first
+    install.packages(pkg)  # install it
+  }
+}
+
+# Install additional (optional) awesomeness
+install.packages(c("devtools", "magick"))
+devtools::install_github("bgreenwell/roundhouse")
+```
+
+]
+
+.footnote[
+[1] I apologize now for the excessive amount of Chuck Norris gifs you will be subject to.
+]
+
+
+---
+
+# Ready to begin?
+
+--
+
+
+```r
+roundhouse::kick("Chuck Norris knows the last digit of pi", 
+                 width = 50)
+```
+
+&lt;img src="lecture-02_files/figure-html/roundhouse-01-1.gif" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: center, middle
+
+# Read the 📖!
+
+&lt;img src="images/read-the-book.jpg" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Inferences concerning `\(\beta_1\)`
+
+* **Bad:** Is there a relationship between `\(X\)` and `\(Y\)`?
+
+--
+
+* **Good:** Is there a .blue[statistically significant linear] relationship between `\(X\)` and `\(Y\)` .blue[at the `\(\alpha = 0.05\)` level]?
+
+--
+
+* How can we reformulate this as a statistical test?
+
+--
+
+$$
+H_0: \beta_1 = 0 \quad vs \quad H_1: \beta_1 \ne 0
+$$
+
+--
+
+* Need a test statistic, reference distribution, etc.
+
+
+# Sampling distribution of `\(\widehat{\beta}_1\)`
+
+.large[
+
+* Assuming `\(\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)\)`
+
+    - `\(\widehat{\beta}_1 \sim ???\)` 🤔
+
+]
+
+
+* Sampling distribution:
+
+--
+
+* How do we estimate `\(\sigma^2\)`?
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

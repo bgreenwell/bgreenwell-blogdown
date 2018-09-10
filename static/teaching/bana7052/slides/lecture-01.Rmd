@@ -69,10 +69,11 @@ class: inverse
 ```{r prerequisites, eval=FALSE}
 # List of required (CRAN) packages
 pkgs <- c(
-  "dplyr",     # for data wrangling
-  "ggplot2",   # for awesome graphics
-  "HistData",  # for historical data sets
-  "tibble"     # for nicer data frames
+  "animation",  # for pre-built statistical animations
+  "dplyr",      # for data wrangling
+  "ggplot2",    # for awesome graphics
+  "HistData",   # for historical data sets
+  "tibble"      # for nicer data frames
 )
 
 # Install required (CRAN) packages
@@ -669,8 +670,9 @@ knitr::include_graphics("images/slr-conditional-distribution.png")
 
 
 ---
+class: center, middle
 
-```{r arsenic-conditional-distribution, echo=FALSE}
+```{r arsenic-conditional-distribution, echo=FALSE, out.width="100%"}
 # Scatterplot of arsenic data
 ggplot(investr::arsenic, aes(x = actual, y = measured)) + 
   geom_point(alpha = 0.75) +
@@ -678,3 +680,210 @@ ggplot(investr::arsenic, aes(x = actual, y = measured)) +
   labs(x = "Actual amount (ppm)", "Measured amount (ppm)",
        title = "Arsenic concentration data")
 ```
+
+
+---
+
+# How do we estimate $\beta_0$ and $\beta_1$?
+
+--
+
+* Ideally, we cwant estimates of $\beta_0$ and $\beta_1$ that give us the "best fitting" line
+
+    - But what is meant by "best fitting"?
+
+--
+
+* The most common approach is to use the method of *least squares* (LS) estimation
+
+* The LS estimates of $\beta_0$ and $\beta_1$ minimize the residual sum of squares (RSS):
+
+$$RSS\left(\beta_0, \beta_1\right) = \sum_{i=1}^n\left[Y_i = \left(\beta_0 + \beta_1 X_i\right)\right]^2 = \sum_{i=1}^n\left(Y_i - \beta_0 - \beta_1 X_i\right)^2$$
+
+* $Y_i - \left(\beta_0 + \beta_1 X_i\right) = \epsilon_i$ are called the *residual errors*
+
+--
+
+.larger[
+
+* Why minimize $\sum_{i=1}^n\epsilon_i^2$? Why not $\sum_{i=1}^n\left|\epsilon_i\right|$ or something more general like $\sum_{i=1}^n\psi\left(\epsilon_i\right)$?
+
+]
+
+
+---
+
+# LS estimation
+
+* How do me minimize $RSS\left(\beta_0, \beta_1\right) = \sum_{i=1}^n\left(Y_i - \beta_0 - \beta_1 X_i\right)^2$?
+
+--
+
+.center[.huger[Calculus!]]
+
+
+---
+
+# Test to see if you remember calculus
+
+.huge[
+
+If $y = \int_a^af\left(x\right)dx$ and I have $y$ followers on Twitter `r emo::ji("bird")`, how many followers do I have? 
+
+]
+
+
+---
+
+# Derive the LS estimates of $\beta_0$ and $\beta_1$
+
+```{r homer-simpson-smart, echo=FALSE, out.width="40%"}
+knitr::include_graphics("images/homer-simpson-smart.jpg")
+```
+
+
+---
+
+# The LS estimates of $\beta_0$ and $\beta_1$
+
+.medium[
+
+* LS estimates
+
+    - $\widehat{\beta}_1 = \frac{\sum_{i=1}^n\left(X_i - \bar{X}\right)\left(Y_i - \bar{Y}\right)}{\sum_{i=1}^n\left(X_i - \bar{X}\right)^2} = \frac{S_{xy}}{ S_{xx}}$
+    
+    - $\widehat{\beta}_0 = \bar{Y} - \widehat{\beta}_1 \bar{X}$
+
+]
+
+--
+
+.medium[
+
+* Don't bother trying to memorize these formulas! `r set.seed(101); emo::ji("laugh")`
+
+* Once we start adding more predictors (.red[i.e., real life]), we lose the ability to easily find closed-form formulas like these and rely on numerical approximations to find them (e.g., in R or SAS)
+
+* As will be proven later, the LS approach provides the .purple[*best linear unbiased estimators*] (BLUE) of $\beta_0$ and $\beta_1$
+
+]
+
+
+---
+
+# Visualizing least squares
+
+.large[
+
+* Try running the following code:
+
+```{r animation, eval=FALSE}
+animation::least.squares(ani.type = "slope")
+animation::least.squares(ani.type = "intercept")
+```
+
+]
+
+
+---
+class: inverse, center, middle
+
+# Fitting the SLR Model in R
+
+
+---
+
+# The `lm()` function
+
+* The `lm()` function can be used to fit the SLR model (or any LM for that matter!)
+
+* The statement `lm(y ~ x, data = df)` fits an SLR model by regressing `y` on `x`, where `y` and `x` are columns in `df`
+
+* To suppress the intercept term, use `y ~ x - 1`
+
+
+---
+
+# Your turn
+
+.larger[Fit an SLR model to the crystal weight data using `weight` as the response and `time` as the predictor and intepret the estimated coeficients.]
+
+
+---
+
+# Solution
+
+.scrollable[
+
+```{r your-turn-02}
+# Load the data (if not already loaded)
+data(crystal, package = "investr")
+
+# Fit an SLR model to the data
+fit <- lm(weight ~ time, data = crystal)
+print(fit)  # print a basic summary
+
+# More verbose summary
+summary(fit)
+```
+
+* The average final weight of crystals increases by an estimated `r round(coef(fit)[2L], digits = 3)` grams for every one-hour increase in growth time `r emo::ji("clock")`
+
+* Does interpretting the intercept make sense in this problem?
+
+]
+
+
+---
+
+# The fitted SLR model
+
+.scrollable[
+
+* The fitted model is given by $\widehat{Y} = \widehat{\beta}_0 + \widehat{\beta}_1$
+
+* We refer to $\widehat{Y}$ as the predicted value
+
+* The fitted values: $\widehat{Y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 X_i, \quad i = 1, 2, \dots, n$
+
+* Use `fitted()` to obtain the fitted values:
+
+```{r fitted-values}
+head(cbind(crystal, "fitted_values" = fitted(fit)))
+```
+
+]
+
+
+---
+
+# Residuals: $Y_i - \widehat{Y}_i$
+
+.scrollable[
+
+```{r crystal-residuals}
+# Residual plot
+ggplot(data = crystal, aes(x = time, y = weight)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, alpha = 0.5) +
+  geom_segment(aes(x = time, y = fitted(fit), xend = time, yend = weight), 
+               alpha = 0.75, col = "red2", linetype = "solid") +
+  theme_light() +
+  xlab("Time (weeks)") +
+  ylab("Weight (grams)") +
+  ggtitle("Crystal weight data")
+```
+
+]
+
+
+---
+
+# Properties of the residuals
+
+.large[
+
+* $\sum_{i=1}^n e_i = 0$ (.purple[**Why?**] `r emo::ji("thinking")`)
+
+]
+

@@ -1,0 +1,166 @@
+---
+title: "Inferences in Simple Linear Regression"
+subtitle: "Lecture 02"
+author: "Brandon M. Greenwell"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    css: ["default", "custom.css", "hygge"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, servr.daemon = TRUE)
+
+# Global chunk options
+knitr::opts_chunk$set(
+  echo = TRUE,
+  # dev = "svg",
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp = 0.618,
+  out.width = "70%",
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE
+)
+
+# Load required packages
+library(dplyr)
+library(patchwork)
+```
+
+background-image: url(https://creativemaths.net/wp-content/uploads/2012/03/it_is_so_easy1-704x480.png)
+
+???
+
+
+---
+class: inverse
+
+# Reading assignment
+
+.larger[
+
+* Chapter: 1
+
+* Sections: 1.1-1.8
+
+* Main topics:
+
+    - Association `r set.seed(101); emo::ji("sleep")`
+    
+    - Simple linear regression
+  
+]
+
+
+---
+
+# Prerquisites<sup>1</sup>
+
+.scrollable[
+
+```{r prerequisites, eval=FALSE}
+# List of required (CRAN) packages
+pkgs <- c(
+  "dplyr",     # for data wrangling
+  "ggplot2",   # for awesome graphics
+  "HistData",  # for historical data sets
+  "tibble"     # for nicer data frames
+)
+
+# Install required (CRAN) packages
+for (pkg in pkgs) {
+  if (!requireNamespace(pkg)) {  # check if already installed first
+    install.packages(pkg)  # install it
+  }
+}
+
+# Install additional (optional) awesomeness
+install.packages(c("devtools", "magick"))
+devtools::install_github("bgreenwell/roundhouse")
+```
+
+]
+
+.footnote[
+[1] I apologize now for the excessive amount of Chuck Norris gifs you will be subject to.
+]
+
+
+---
+
+# Ready to begin?
+
+--
+
+```{r roundhouse-01}
+roundhouse::kick("Chuck Norris knows the last digit of pi", 
+                 width = 50)
+```
+
+
+---
+class: center, middle
+
+# Read the `r emo::ji("book")`!
+
+```{r wonka, echo=FALSE, out.width="60%"}
+knitr::include_graphics("images/read-the-book.jpg")
+```
+
+
+---
+
+# Inferences concerning $\beta_1$
+
+.large[
+
+* **Bad:** Is there a relationship between $X$ and $Y$?
+
+--
+
+* **Good:** Is there a .blue[statistically significant linear] relationship between $X$ and $Y$ .blue[at the $\alpha = 0.05$ level]?
+
+--
+
+* How can we reformulate this as a statistical test?
+
+--
+
+$$
+H_0: \beta_1 = 0 \quad vs \quad H_1: \beta_1 \ne 0
+$$
+
+--
+
+* Need a point estimate, test statistic, reference distribution, etc.
+
+]
+
+
+---
+
+# Sampling distribution of $\widehat{\beta}_1$
+
+.large[
+
+* Assuming $\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)$
+
+    - $\widehat{\beta}_1 \sim ???$ `r emo::ji("thinking")`
+
+]
+
+
+* Sampling distribution:
+
+--
+
+* How do we estimate $\sigma^2$?
+
