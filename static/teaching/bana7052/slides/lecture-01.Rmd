@@ -633,7 +633,7 @@ where $\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)$
 
 .large[
 
-* $Y_i \stackrel{iid}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n$
+* $Y_i \stackrel{indep.}{\sim} N\left(\beta_0 + \beta_1 X_i, \sigma^2\right), \quad i = 1, 2, \dots, n$
 
      - $\mu_i = \beta_0 + \beta_1 X_i$ is called the *linear predictor* (LP)
 
@@ -886,4 +886,36 @@ ggplot(data = crystal, aes(x = time, y = weight)) +
 * $\sum_{i=1}^n e_i = 0$ (.purple[**Why?**] `r emo::ji("thinking")`)
 
 ]
+
+
+---
+
+# Your turn
+
+1. Simulate $Y_i \stackrel{indep.}{\sim} N\left(\mu = 1 + 2X_i, \sigma^2 = 1.2^2\right), \quad i = 1, 2, ... 30$, where $X_i \stackrel{iid}{\sim} U\left(0, 5\right)$
+
+2. Fit an SLR model to the data and estimate the slope and intercept
+
+
+---
+
+# Solution
+
+.scrollable[
+
+```{r your-turn-03}
+# Simulate data
+set.seed(1105)  # for reproducibility
+x <- runif(30, min = 0, max = 5)  # see ?runif for details
+y <- rnorm(30, mean = 1 + 2*x, sd = 1.2)
+
+# Simple scatterplot
+plot(x, y)
+
+# Fit a SLR model
+lm(y ~ x)
+```
+
+]
+
 
