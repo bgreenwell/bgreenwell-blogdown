@@ -21,7 +21,6 @@ Courses I have taught or am currently teaching:
 
     - [BANA 7052: Applied Linear Regression](https://github.com/bgreenwell/uc-bana7052)
     
-
 * Wright State University
 
     - STT 7140: Environmental Statistics
