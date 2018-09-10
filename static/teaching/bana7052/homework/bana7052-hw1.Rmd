@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Use R to analyze the given data and answer the following questions. Consider the alumni giving rate as the response variable $Y$ and the percentage of classes with fewer than 20 students as the predictor variable $X$.
 
-The data are available for download at https://github.com/bgreenwell/uc-bana7052/tree/master/data or they can be downloaded directly from the web:
+The data are available for download at https://github.com/bgreenwell/uc-bana7052/tree/master/data. Alternatively, you can import the data into R directly from the web:
 
 ```{r download-alumni}
 url <- "https://bgreenwell.netlify.com/data/alumni.csv"
@@ -24,14 +24,15 @@ alumni <- read.csv(url)
 DT::datatable(alumni)  # requires DT package
 ```
 
-a)	Start with exploratory data analysis. Show summary statistics of the response variable and predictor variable. 
+a)	Start with a basic exploratory data analysis. Show summary statistics of the response variable and predictor variable. 
 
-b)	What is the nature of variables X and Y? Are there outliers? What is the correlation coefficient? Draw a scatter plot. Any major comments about the data?
+b)	What is the nature of the variables $X$ and $Y$? Are there outliers? What is the correlation coefficient? Draw a scatter plot. Any major comments about the data?
 
-c)	Fit a simple linear regression on the data. What is your estimated regression equation? 
+c)	Fit a simple linear regression to the data. What is your estimated regression equation? 
 
 d)	Interpret your results. 
-Write a brief report up to two pages. Please clearly label your figures and tables. No raw outputs please.
+
+Write a brief report **up to two pages**. Please clearly label your figures and tables. **No raw outputs please.**
 
 
 
@@ -65,15 +66,11 @@ c) Why is OLS a popular choice for estimating $\beta_0$ and $\beta_1$?
 
 **Question 4.** Establish the following relationships for the simple linear regression model. (Some are trivial to show.)
 
-a) The fitted line passes through the point $\left(\bar{X}, \bar{Y}\right)$
-
+a) The fitted line passes through the point $\left(\bar{X}, \bar{Y}\right)$.
 
 b) $\sum_{i=1}^n e_i = 0$.
 
-
-
-c) $\sum_{i=1}^n Y_i = \sum_{i=1}^n \widehat{Y}_i$
-
+c) $\sum_{i=1}^n Y_i = \sum_{i=1}^n \widehat{Y}_i$.
 
 d) $\sum_{i=1}^n X_ie_i = 0$; that is, the sum of the weighted residuals is zero when the residual of the *i*-th observation is weighted by the predictor value of the *i*-th observation.
 
