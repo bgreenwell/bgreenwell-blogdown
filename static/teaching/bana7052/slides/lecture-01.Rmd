@@ -1010,6 +1010,17 @@ $$\widehat{\sigma}^2 = \frac{1}{n-2}\sum{i=1}^n e_i^2 = MSE$$
 
 
 ---
+
+# Your turn
+
+.large[
+
+Use the `fitted()`, `residuals()`, and `sigma()` functions to obtain the fitted values, residuals, and RMSE, respectively, for the crystal weight example. Confirm the formula for the residuals.
+
+]
+
+
+---
 class: center, middle
 
 .huge[
