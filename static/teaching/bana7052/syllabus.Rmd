@@ -13,24 +13,24 @@ Section 002 Thu. 6pm-9:50pm, RECCENTR 3200
 
 **Name:** Dr. Brandon M. Greenwell
 
-**Office:** Room 106 in the Lindner College of Business
+**Office:** 106 Carl H. Lindner Hall
 
 **Email:** greenwell.brandon@gmail.com (preferred)
 
-**Phone:** 614-288-9450
-
 **Office hours:** by appointment
+
+**Phone:** 614-288-9450
 
 
 ### Teaching assistant:
 
-**Name:** ?, PhD student
+**Name:** Tianhai Zu, PhD student
 
-**Office:** ?
+**Office:** 534 Carl H. Lindner Hall
 
-**Email:** ?
+**Email:** zuti@mail.uc.edu
 
-**TA office Hours:** ?
+**Office Hours:** TBD.
 
 
 ### Course info:
@@ -99,7 +99,7 @@ See INTRAGROUP_EVALUATION_BANA7041.pdf for details on HW intragroup evaluation.
 
 ### Computing Resources:  
 
-We will use R for all the data analyses in this course. You can download R for free through at http://www.r-project.org/. It is also reccomended that you download and use RStudio: https://www.rstudio.com/.
+We will use R for all the data analyses in this course. You can download R for free through at http://www.r-project.org/. It is also recommended that you download and use RStudio: https://www.rstudio.com/. If you're new to R, try out this free [DatCamp course](https://www.datacamp.com/courses/free-introduction-to-r?utm_source=adwords_ppc&utm_campaignid=805200711&utm_adgroupid=42045039256&utm_device=c&utm_keyword=%2Bdata%20%2Bcamp%20%2Br&utm_matchtype=b&utm_network=g&utm_adpostion=1t1&utm_creative=191102095622&utm_targetid=kwd-424954486289&utm_loc_interest_ms=&utm_loc_physical_ms=9015705&gclid=CjwKCAjwrNjcBRA3EiwAIIOvq-DJIlhOIc3C6hbXvU5JQ6YV71frIOKyka9E_TA6fZGUO2g1qzMy4BoCEKIQAvD_BwE).
 
 
 ### Homework Group Work Structure of the Course:  
@@ -158,4 +158,3 @@ Week 14
 11/22	No Class. Thanksgiving Break. 	
 Week 15
 11/29	Review; Exam for Module II (7-9pm)	
-
