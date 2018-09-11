@@ -34,15 +34,11 @@ class: inverse
 
 .larger[
 
-* Chapter: 1
+* Chapter: 2
 
-* Sections: 1.1-1.8
+* Sections: TBD
 
-* Main topics:
-
-    - Association 😴
-    
-    - Simple linear regression
+* Main topics: TBD
   
 ]
 
@@ -55,30 +51,9 @@ class: inverse
 
 
 ```r
-# List of required (CRAN) packages
-pkgs &lt;- c(
-  "dplyr",     # for data wrangling
-  "ggplot2",   # for awesome graphics
-  "HistData",  # for historical data sets
-  "tibble"     # for nicer data frames
-)
-
-# Install required (CRAN) packages
-for (pkg in pkgs) {
-  if (!requireNamespace(pkg)) {  # check if already installed first
-    install.packages(pkg)  # install it
-  }
-}
-
-# Install additional (optional) awesomeness
-install.packages(c("devtools", "magick"))
-devtools::install_github("bgreenwell/roundhouse")
+# TBD
 ```
 
-]
-
-.footnote[
-[1] I apologize now for the excessive amount of Chuck Norris gifs you will be subject to.
 ]
 
 
@@ -90,7 +65,7 @@ devtools::install_github("bgreenwell/roundhouse")
 
 
 ```r
-roundhouse::kick("Chuck Norris knows the last digit of pi", 
+roundhouse::kick("Chuck Norris counted to infinity, twice", 
                  width = 50)
 ```
 
@@ -98,11 +73,9 @@ roundhouse::kick("Chuck Norris knows the last digit of pi",
 
 
 ---
-class: center, middle
 
-# Read the 📖!
-
-&lt;img src="images/read-the-book.jpg" width="60%" style="display: block; margin: auto;" /&gt;
+background-image: url(images/significance.png)
+background-size: 40%
 
 
 ---
@@ -111,23 +84,39 @@ class: center, middle
 
 .large[
 
-* **Bad:** Is there a relationship between `\(X\)` and `\(Y\)`?
+* **Bad:** Is there a relationship between `\(X\)` and `\(Y\)`? (.red[not testable])
+
+]
 
 --
 
-* **Good:** Is there a .blue[statistically significant linear] relationship between `\(X\)` and `\(Y\)` .blue[at the `\(\alpha = 0.05\)` level]?
+.large[
+
+* **Good:** Is there a statistically significant linear relationship between `\(X\)` and `\(Y\)` at the `\(\alpha = 0.05\)` level? (.green[testable])
+
+]
 
 --
+
+.large[
 
 * How can we reformulate this as a statistical test?
 
+]
+
 --
+
+.large[
 
 $$
 H_0: \beta_1 = 0 \quad vs \quad H_1: \beta_1 \ne 0
 $$
 
+]
+
 --
+
+.large[
 
 * Need a point estimate, test statistic, reference distribution, etc.
 
