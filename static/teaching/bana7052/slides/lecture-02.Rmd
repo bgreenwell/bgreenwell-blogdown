@@ -134,6 +134,29 @@ $$
 
 ---
 
+# Properties of $\widehat{\beta}_1$
+
+.large[
+
+* Recall from the previous lecture that LS estimation provides the best linear unbiasted estimates .blue[(BLUE)] of $\beta_0$ and $\beta_1$; namely, $\widehat{\beta}_0$ and $\widehat{\beta}_1$
+
+    - Unbiased since $E\left[\widehat{\beta}_0\right] = \beta_0$ and $E\left[\widehat{\beta}_1\right] = \beta_1$
+
+    - Best in the sense that $\widehat{\beta}_0$ and $\widehat{\beta}_1$ have the smallest variance among all other **linear unbiased** estimators of $\beta_0$ and $\beta_1$, respectively
+
+]
+
+--
+
+.large[
+
+* So what is $Var\left[\widehat{\beta}_0\right] = \beta_0$ and $Var\left[\widehat{\beta}_1\right] = \beta_1$?
+
+]
+
+
+---
+
 # Sampling distribution of $\widehat{\beta}_1$
 
 .large[

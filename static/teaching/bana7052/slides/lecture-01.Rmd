@@ -62,7 +62,7 @@ class: inverse
 
 ---
 
-# Prerquisites<sup>1</sup>
+# Prerquisites
 
 .scrollable[
 
@@ -88,10 +88,6 @@ install.packages(c("devtools", "magick"))
 devtools::install_github("bgreenwell/roundhouse")
 ```
 
-]
-
-.footnote[
-[1] I apologize now for the excessive amount of Chuck Norris gifs you will be subject to.
 ]
 
 
@@ -566,7 +562,7 @@ roundhouse::kick("Chuck Norris caught all the Pok\uE9mon from a landline",
 
     - $\beta_1$  is the slope of the regression line
     
-    - $\epsilon_i \sim iid \left(0, \sigma^2\right)$
+    - $\epsilon_i \stackrel{iid}{\sim} \left(0, \sigma^2\right)$
 
 ]
 
@@ -704,7 +700,7 @@ $$RSS\left(\beta_0, \beta_1\right) = \sum_{i=1}^n\left[Y_i = \left(\beta_0 + \be
 
 --
 
-.larger[
+.large[
 
 * Why minimize $\sum_{i=1}^n\epsilon_i^2$? Why not $\sum_{i=1}^n\left|\epsilon_i\right|$ or something more general like $\sum_{i=1}^n\psi\left(\epsilon_i\right)$?
 
@@ -748,11 +744,9 @@ knitr::include_graphics("images/homer-simpson-smart.jpg")
 
 .medium[
 
-* LS estimates
-
-    - $\widehat{\beta}_1 = \frac{\sum_{i=1}^n\left(X_i - \bar{X}\right)\left(Y_i - \bar{Y}\right)}{\sum_{i=1}^n\left(X_i - \bar{X}\right)^2} = \frac{S_{xy}}{ S_{xx}}$
+* $\widehat{\beta}_1 = \frac{\sum_{i=1}^n\left(X_i - \bar{X}\right)\left(Y_i - \bar{Y}\right)}{\sum_{i=1}^n\left(X_i - \bar{X}\right)^2} = \frac{S_{xy}}{ S_{xx}} = \sum_{i=1}^n\left(\frac{X_i - \bar{X}}{\sum_{i=1}^n\left(X_i - \bar{X}\right)^2}\right)Y_i = \sum_{i=1}^n w_iY_i$
     
-    - $\widehat{\beta}_0 = \bar{Y} - \widehat{\beta}_1 \bar{X}$
+* $\widehat{\beta}_0 = \bar{Y} - \widehat{\beta}_1 \bar{X}$
 
 ]
 
@@ -761,6 +755,12 @@ knitr::include_graphics("images/homer-simpson-smart.jpg")
 .medium[
 
 * Don't bother trying to memorize these formulas! `r set.seed(101); emo::ji("laugh")`
+
+]
+
+--
+
+.medium[
 
 * Once we start adding more predictors (.red[i.e., real life]), we lose the ability to easily find closed-form formulas like these and rely on numerical approximations to find them (e.g., in R or SAS)
 
@@ -775,12 +775,14 @@ knitr::include_graphics("images/homer-simpson-smart.jpg")
 
 .large[
 
-* Try running the following code:
+Take five minutes and try running the following code:
 
 ```{r animation, eval=FALSE}
 animation::least.squares(ani.type = "slope")
 animation::least.squares(ani.type = "intercept")
 ```
+
+What do you think is happening here?
 
 ]
 
